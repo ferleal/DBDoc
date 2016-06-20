@@ -30,6 +30,7 @@
 
 from wb import *
 import grt
+import ntpath
 from mforms import FileChooser
 import mforms
 
@@ -58,7 +59,7 @@ def htmlDataDictionary(diagram):
 
     htmlFile = open("%s.html" % (htmlOut), "w")
     print >> htmlFile, "<html><head>"
-    print >> htmlFile, "<title>Data dictionary: %s</title>" % (htmlOut)
+    print >> htmlFile, "<title>Data dictionary: %s</title>" % (path_leaf(htmlOut))
 
     print >> htmlFile, """<style>
     td,th {
@@ -87,7 +88,7 @@ def htmlDataDictionary(diagram):
     </style>
     </head>
     <body>"""
-    print >> htmlFile, "<img src='%s.png'>" % (htmlOut)
+    print >> htmlFile, "<img src='%s.png'>" % (path_leaf(htmlOut))
 
     print >> htmlFile, "%s" % (tables)
 
@@ -133,3 +134,7 @@ def writeTableDoc(table):
 
         htmlFile += "</table></br>"
         return htmlFile
+
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
