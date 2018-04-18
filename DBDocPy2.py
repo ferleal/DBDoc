@@ -34,7 +34,7 @@ import ntpath
 from mforms import FileChooser
 import mforms
 
-ModuleInfo = DefineModule(name="Drake DBDocPy2", author="Fernando Leal", version="1.0", description="Data Dictionary")
+ModuleInfo = DefineModule(name="Drake DBDocPy2", author="Fernando Leal - Mod. Nicolas Bustos", version="2.0", description="Data Dictionary")
 
 
 @ModuleInfo.plugin("drake.DBDocPy2.htmlDataDictionary", caption="DBDoc: As HTML File",
@@ -58,48 +58,50 @@ def htmlDataDictionary(diagram):
 
 
     htmlFile = open("%s.html" % (htmlOut), "w")
-    print >> htmlFile, "<html><head>"
+    print >> htmlFile, "<html>"
+    print >> htmlFile, "<head>"
     print >> htmlFile, "<title>Data dictionary: %s</title>" % (path_leaf(htmlOut))
 
-    print >> htmlFile, """<style>
-    td,th {
-      text-align:center;
-      vertical-align:middle;
-    }
-    table {
-      border-collapse: collapse;
-    }
-    caption, th, td {
-      padding: .2em .8em;
-      border: 1px solid #fff;
-    }
-    caption {
-      background: #dbb768;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    th {
-      font-weight: bold;
-      background: #f3ce7d;
-    }
-    td {
-      background: #ffea97;
-    }
-    </style>
-    </head>
-    <body>"""
+    print >> htmlFile, """
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+<style>
+        
+</style>
+</head>
+<body>
+        <div class="wrapper">
+                <section class="content">
+                        <div class="row">
+                                <div class="col-xs-12">"""
     print >> htmlFile, "<img src='%s.png'>" % (path_leaf(htmlOut))
 
     print >> htmlFile, "%s" % (tables)
 
-    print >> htmlFile, "</body></html>"
+    print >> htmlFile, """
+					                                </div>
+                                <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                </section>
+                <!-- /.content -->
+        </div>
+        <h3>Style got from <a href="https://adminlte.io/themes/AdminLTE/index.html">AdminLTE</a></h3>
+</body>
+
+</html>
+	"""
 
     return 0
 
 def writeTableDoc(table):
         htmlFile = ''
-        htmlFile += "<table><caption>Table: %s - %s</caption>" % (table.name, table.comment)
-        htmlFile += """<tr><td colspan=\"7\">Attributes</td></tr>
+        htmlFile += "<!-- Table: %s %s --><caption></caption>" % (table.name, table.comment)
+        htmlFile += "<div class=\"box\"><div class=\"box-header\"><h3 class=\"box-title\">Table: %s</h3></div><!-- /.box-header -->" % (table.name)
+        htmlFile += """<div class="box-body">
+		<table class="table table-bordered table-striped">
+        <tr><td colspan=\"7\">Attributes</td></tr>
         <tr>
         <th>Name</th>
         <th>Type</th>
@@ -117,9 +119,9 @@ def writeTableDoc(table):
             column.name, column.formattedType, nn, pk, fk, column.defaultValue, column.comment)
 
         if (len(table.indices)):
-            htmlFile += "</table></br>"
+            htmlFile += "</table>"
             for index in table.indices:
-                htmlFile += "<table><caption>Index: %s</caption>" % (index.name)
+                htmlFile += "<div class=\"col-sm-12 col-md-6 col-lg-4\"><table class=\"table table-bordered table-striped\"><caption>Index: %s</caption>" % (index.name)
                 htmlFile += """<tr><td colspan=\"4\">Attributes</td></tr>
                 <tr>
                 <th>Name</th>
@@ -130,9 +132,9 @@ def writeTableDoc(table):
                 """
                 htmlFile += "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (
                 index.name, map(lambda x: "`" + x.referencedColumn.name + "`", index.columns),index.indexType, index.comment)
-                htmlFile += "</table></br>"
+                htmlFile += "</table></div>"
 
-        htmlFile += "</table></br>"
+        htmlFile += "</div></div>"
         return htmlFile
 
 def path_leaf(path):
