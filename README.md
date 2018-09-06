@@ -11,6 +11,7 @@ A Python script to generate documentation from MySQL Workbench ERR diagram.
 * Navigate to menu Scripting > Install Plugin/Module...
 * Browse and select the extracted .py file
 * Restart the Workbench
+* Files bower_components/bootstrap/dist/css/bootstrap.min.css and dist/css/AdminLTE.min.css are required to table style.
 
 ###Usage
 * Open Modal
