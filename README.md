@@ -1,6 +1,9 @@
 # DBDoc
 Mysql Workbench DBDoc to html
 
+# Updated
+* Migrate to python 3
+
 #MySQL Workbench Model Document Generation
 A Python script to generate documentation from MySQL Workbench ERR diagram.
 
